@@ -17,7 +17,9 @@
 
       // .each(object_to_loop_through, function_to_perform(object_index, object_value))
       $.each(data, function(index, task) {
-        var liElement = '<li><div class="view"><input class="toggle" type="checkbox"><label>' +
+        // HTML for a checked checkbox: <input class="toggle" type="checkbox" checked />
+        var checkedStatus = task.done ? "checked" : "";
+        var liElement = '<li><div class="view"><input class="toggle" type="checkbox"' + checkedStatus + '><label>' +
         task.title + '</label></div></li>';
         htmlString += liElement;
       });

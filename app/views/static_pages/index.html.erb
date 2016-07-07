@@ -3,5 +3,27 @@
     <h1>todos</h1>
   </header>
   <section class="main">
+    <ul class="todo-list">
+
+    </ul>
   </section>
 </section>
+
+<script>
+  $(function() {
+    // The items have been pulled from our database --> Task model --> Tasks controller (render JSON representation) --> JS console using AJAX .get request:
+    $.get("/tasks").success(function(data) {
+      var htmlString = "";
+
+      // .each(object_to_loop_through, function_to_perform(object_index, object_value))
+      $.each(data, function(index, task) {
+        var liElement = '<li><div class="view"><input class="toggle" type="checkbox"><label>' +
+        task.title + '</label></div></li>';
+        htmlString += liElement;
+      });
+      var ulTodos = $('.todo-list');
+      // Set the HTML contents of the .todo-list class with htmlString:
+      ulTodos.html(htmlString);
+    });
+  });
+</script>

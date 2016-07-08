@@ -17,15 +17,34 @@
 
       // .each(object_to_loop_through, function_to_perform(object_index, object_value))
       $.each(data, function(index, task) {
-        // HTML for a checked checkbox: <input class="toggle" type="checkbox" checked />
+        // HTML for a checked checkbox: E.g. <input class="toggle" type="checkbox" checked data-id="2">
         var checkedStatus = task.done ? "checked" : "";
-        var liElement = '<li><div class="view"><input class="toggle" type="checkbox"' + checkedStatus + '><label>' +
+        var liElement = '<li><div class="view"><input class="toggle" type="checkbox"' + " data-id='" + task.id + "'" + checkedStatus + '><label>' +
         task.title + '</label></div></li>';
         htmlString += liElement;
       });
       var ulTodos = $('.todo-list');
       // Set the HTML contents of the .todo-list class with htmlString:
       ulTodos.html(htmlString);
+
+      // .change --> Event that is sent to an element when its value changes:
+      $('.toggle').change(function(e) {
+        // Extract the data-id from the input element:
+        var itemId = $(e.target).data("id");
+        console.log(itemId);
+
+        // .is() --> Check the current matched set of elements against a selector, element, or jQuery object and return true if at least one of these elements matches the given arguments.
+        var doneValue = Boolean($(e.target).is(':checked'));
+        console.log("done:", doneValue);
+
+        // Update the task's "done" value in the database (API request):
+        $.post("/tasks/" + itemId, {
+          _method: "PUT",
+          task: {
+            done: doneValue
+          }
+        });
+      });
     });
   });
 </script>

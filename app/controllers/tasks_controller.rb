@@ -1,7 +1,7 @@
 class TasksController < ApplicationController
   def index
-    # Show JSON representation of the Task items in the database:
-    render json: Task.all
+    # Show JSON representation of the Task items in the database, ordering by id:
+    render json: Task.order(:id)
   end
 
   def update

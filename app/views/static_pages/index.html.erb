@@ -1,6 +1,9 @@
 <section class="todoapp">
   <header class="header">
     <h1>todos</h1>
+    <form id="new-form">
+      <input type="text" class="new-todo">
+    </form>
   </header>
   <section class="main">
     <ul class="todo-list">
@@ -11,6 +14,14 @@
 
 <script>
   $(function() {
+    // Find the #new-form element, then register a callback to happen when the form is submitted:
+    $('#new-form').submit(function(event) {
+      // .preventDefault() --> Stop the default behavior of reloading the page on form submission.
+      event.preventDefault();
+      var textbox = $('.new-todo');
+      console.log("Task: ", textbox.val());
+    });
+
     // The taskHtml method takes in a JS representation of the task and produces an HTML representation using <li> tags.
     function taskHtml(task) {
       // HTML for a checked checkbox: E.g. <input class="toggle" type="checkbox" checked data-id="2">

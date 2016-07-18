@@ -14,22 +14,6 @@
 
 <script>
   $(function() {
-    // Find the #new-form element, then register a callback to happen when the form is submitted:
-    $('#new-form').submit(function(event) {
-      // .preventDefault() --> Stop the default behavior of reloading the page on form submission.
-      event.preventDefault();
-      var textbox = $('.new-todo');
-      var payload = {
-        task: {
-          title: textbox.val()
-        }
-      };
-      // $.post( url [, data ] [, success ] [, dataType ] )
-      $.post("/tasks", payload).success(function(data) {
-        console.log("Successful HTTP Request");
-      });
-    });
-
     // The taskHtml method takes in a JS representation of the task and produces an HTML representation using <li> tags.
     function taskHtml(task) {
       // HTML for a checked checkbox: E.g. <input class="toggle" type="checkbox" checked data-id="2">
@@ -70,6 +54,28 @@
 
       // .change --> Event that is sent to an element when its value changes:
       $('.toggle').change(toggleTask);
+    });
+
+    // Find the #new-form element, then register a callback to happen when the form is submitted:
+    $('#new-form').submit(function(event) {
+      // .preventDefault() --> Stop the default behavior of reloading the page on form submission.
+      event.preventDefault();
+      var textbox = $('.new-todo');
+      var payload = {
+        task: {
+          title: textbox.val()
+        }
+      };
+      // $.post( url [, data ] [, success ] [, dataType ] )
+      // Load data from the server using a HTTP POST request.
+      // Append data onto the todo list as upon submission:
+      $.post("/tasks", payload).success(function(data) {
+        var htmlString = taskHtml(data);
+        var ulTodos = $('.todo-list');
+        ulTodos.append(htmlString);
+        // Ensure that checking a freshly added item (no get request has been issued) sets "done" to true in the database:
+        $('.toggle').click(toggleTask);
+      });
     });
   });
 </script>

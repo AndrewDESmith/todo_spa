@@ -9,6 +9,7 @@ RSpec.describe TasksController, type: :controller do
       task1.update_attributes(title: "Something else")
       get :index
       expect(response).to have_http_status :success
+      # JSON.decode --> Parses a JSON string into a hash.
       response_value = ActiveSupport::JSON.decode(@response.body)
       expect(response_value.count).to eq(2)
       # Result from the API call is an array of JSON tasks.  Extract (collect) each task's id value into an array:

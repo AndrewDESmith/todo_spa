@@ -3,8 +3,8 @@ $(function() {
   function taskHtml(task) {
     // HTML for a checked checkbox: E.g. <input class="toggle" type="checkbox" checked data-id="2">
     var checkedStatus = task.done ? "checked" : "";
-    var liElement = '<li><div class="view"><input class="toggle" type="checkbox"' + " data-id='" + task.id + "'" + checkedStatus + '><label>' + task.title + '</label></div></li>';
-
+    var liClass = task.done ? "completed" : "";
+    var liElement = '<li id="listItem-' + task.id + '" class="' + liClass + '">' + '<div class="view"><input class="toggle" type="checkbox"' + " data-id='" + task.id + "'" + checkedStatus + '><label>' + task.title + '</label></div></li>';
     return liElement;
   }
 
@@ -22,6 +22,16 @@ $(function() {
       task: {
         done: doneValue
       }
+    }).success(function(data) {
+      // Redraw the li on the page after a successful AJAX request.
+      // (1) Extract the current state of the task (checked or not?).
+      var liHtml = taskHtml(data);
+      // (2) Find the li element by id.
+      var $li = $("#listItem-" + data.id);
+      // (3) Replace that li element with the updated liElement in taskHtml.
+      $li.replaceWith(liHtml);
+      // (4) Update the .toggle class (for the input element nested in this particular li), for cases where a new item is placed on the page after the click handler has been setup.
+      $('.toggle').change(toggleTask);
     });
   }
 
@@ -60,6 +70,8 @@ $(function() {
       ulTodos.append(htmlString);
       // Ensure that checking a freshly added item (no get request has been issued) sets "done" to true in the database:
       $('.toggle').click(toggleTask);
+      // Reset the value of the input text:
+      $('.new-todo').val('');
     });
   });
 });
